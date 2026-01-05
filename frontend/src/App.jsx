@@ -5,6 +5,7 @@ import PostGig from './pages/PostGig'
 import SkillExchange from './pages/SkillExchange'
 import Profile from './pages/Profile'
 import GigList from './pages/GigList'
+import Applayout from './layout/AppLayout'
 
 
 function App() {
@@ -12,7 +13,7 @@ function App() {
   return (
     <main>
       <div>
-        <Routes>
+        <Routes element={<Applayout/>}>
           <Route path="/" element={<LandingPage/>}/>
           <Route path="/dashboard" element={<Dashboard/>}/>
           <Route path="/post-gig" element={<PostGig/>}/>
