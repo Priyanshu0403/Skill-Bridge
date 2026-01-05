@@ -8,10 +8,10 @@ import reviewRoutes from "./reviewRoutes.js";
 
 const router = express.Router();
 
-router.use("/auth", authRoutes);
-router.use("/users", userRoutes);
-router.use("/trasactions", transactionRoutes);
+// router.use("/auth", authRoutes);
+// router.use("/users", userRoutes);
+// router.use("/trasactions", transactionRoutes);
 router.use("/gig", gigRoutes);
-router.use("/reviews", reviewRoutes);
+// router.use("/reviews", reviewRoutes);
 
 export default router;
