@@ -1,5 +1,6 @@
 import JWT from "jsonwebtoken";
-export const authMiddleware = (req,res,next)=>{
+
+const authMiddleware = (req,res,next)=>{
 	try {
 		const authHeader = req?.headers?.authorization;
 		if(!authHeader){
@@ -20,7 +21,7 @@ export const authMiddleware = (req,res,next)=>{
 		}
 
 		const decoded = JWT.verify(token, process.env.JWT_SECRET);
-		console.log("Decoded JWT:", decoded); //for debugging purpose to check what the decoded variable contains
+		// console.log("Decoded JWT:", decoded); //for debugging purpose to check what the decoded variable contains
 
 		// Attach user to request
 		req.user = {
@@ -35,3 +36,4 @@ export const authMiddleware = (req,res,next)=>{
 	}
 }
 
+export default authMiddleware;
