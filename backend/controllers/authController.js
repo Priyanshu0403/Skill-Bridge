@@ -1,4 +1,4 @@
-import db from "../config/db";
+import db from "../config/db.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -60,6 +60,7 @@ export const loginUser = async(req,res)=>{
         return res.status(401).json({status:"failed", message:"Invalid password"});
     }
 
+    // Generate JWT token
     const token = jwt.sign(
         {user_id: user.user_id, email: user.email},
         process.env.JWT_SECRET,
@@ -91,7 +92,8 @@ export const loginUser = async(req,res)=>{
 
 export const getCurrentUser = async(req,res) =>{
     try {
-        const userId = req.user.user_id;
+        //below values comes from authMiddleware after decoding the JWT token
+        const userId = req.user.userId;
 
         const user = await db.oneOrNone(
             `SELECT user_id, name, email, credits, reputation_score
@@ -104,7 +106,9 @@ export const getCurrentUser = async(req,res) =>{
             return res.status(404).json({status: "failed", message: "User not found"});
         }
 
-        res.status(200).json({status: "success", data: user});
+        res.status(200).json({status: "success",
+            message:"User fetched successfully",
+            data: user});
 
     } catch (error) {
         console.log(error);
