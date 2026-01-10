@@ -11,7 +11,7 @@ const router = express.Router();
 router.use("/auth", authRoutes);
 router.use("/users", userRoutes);
 // router.use("/trasactions", transactionRoutes);
-// router.use("/gig", gigRoutes);
+router.use("/gig", gigRoutes);
 // router.use("/reviews", reviewRoutes);
 
 export default router;

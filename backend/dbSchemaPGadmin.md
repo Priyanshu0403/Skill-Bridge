@@ -27,14 +27,18 @@ CREATE TABLE user_skills (
 --🟨 4. GIGS TABLE
 CREATE TABLE gigs (
     gig_id SERIAL PRIMARY KEY,
-    posted_by INT REFERENCES users(user_id),
     title VARCHAR(200) NOT NULL,
     description TEXT NOT NULL,
-    mode VARCHAR(20) NOT NULL, -- 'paid' or 'credit'
-    budget INT,
-    credits_offered INT,
-    status VARCHAR(20) DEFAULT 'open', -- open, assigned, completed
-    created_at TIMESTAMP DEFAULT NOW()
+    -- money | skill (barter)
+    type VARCHAR(20) NOT NULL CHECK (type IN ('money', 'skill')),
+    budget NUMERIC(10,2) DEFAULT 0,
+    created_by INTEGER NOT NULL,
+    status VARCHAR(20) NOT NULL CHECK (type IN ('open', 'assigned','completed')),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_gig_creator
+        FOREIGN KEY (created_by)
+        REFERENCES users(user_id)
+        ON DELETE CASCADE
 );
 
 --🟫 5. GIG_SKILLS TABLE (Gig Requirements)
