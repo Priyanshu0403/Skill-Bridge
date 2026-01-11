@@ -41,6 +41,33 @@ CREATE TABLE gigs (
         ON DELETE CASCADE
 );
 
+--gig application table
+CREATE TABLE gig_applications (
+    application_id SERIAL PRIMARY KEY,
+
+    gig_id INT NOT NULL,
+    applicant_id INT NOT NULL,
+
+    status VARCHAR(20) DEFAULT 'applied'
+        CHECK (status IN ('applied', 'accepted', 'rejected')),
+
+    applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_gig
+        FOREIGN KEY (gig_id)
+        REFERENCES gigs(gig_id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_applicant
+        FOREIGN KEY (applicant_id)
+        REFERENCES users(user_id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT unique_gig_applicant
+        UNIQUE (gig_id, applicant_id)
+);
+
+
 --🟫 5. GIG_SKILLS TABLE (Gig Requirements)
 CREATE TABLE gig_skills (
     gig_id INT REFERENCES gigs(gig_id) ON DELETE CASCADE,

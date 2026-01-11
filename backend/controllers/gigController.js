@@ -1,3 +1,4 @@
+import db from "../config/db.js";
 export const createGig = async (req, res)=>{
     try {
         const {title, description, type, budget,} = req.body;
@@ -51,12 +52,14 @@ export const getAllGigs = async (req, res)=>{
         
         const values = [];
 
+        //the gap before WHERE is important as if no gap then the query will be invalid 
+        //because there will be no space between FROM and WHERE clauses
         if(status){
-            query += "WHERE g.status=$1";
+            query += " WHERE g.status=$1 ";
             values.push(status); 
         }
 
-        query += "ORDER BY g.created_at DESC"
+        query += " ORDER BY g.created_at DESC"
 
         const gigs = await db.any(query, values);
 
@@ -125,9 +128,9 @@ export const updateGig = async (req, res)=>{
         const updateGig = await db.oneOrNone(
             `UPDATE gigs
             SET 
-                title = COALESCE($1,title)
-                description = COALESCE($2, description)
-                budget = COALESCE($3, budget)
+                title = COALESCE($1,title),
+                description = COALESCE($2, description),
+                budget = COALESCE($3, budget),
                 status = COALESCE($4,status)
             WHERE gig_id = $5 AND created_by = $6
             RETURNING gig_id, title,description,type,budget,status,created_at`,
@@ -144,7 +147,7 @@ export const updateGig = async (req, res)=>{
         res.status(200).json({
             status: "Success",
             message:" Gig updated successfully",
-            data: updatedGig
+            data: updateGig
         });
     } catch (error) {
         return res.status(500).json({
@@ -153,9 +156,33 @@ export const updateGig = async (req, res)=>{
         })
     }
 }
+
 export const deleteGig = async (req, res)=>{
     try {
-        
+        const gigId = parseInt(req.params.id);
+        const userId = req.user.userId;
+
+        const deleteGig = await db.oneOrNone(
+            `DELETE FROM gigs 
+            WHERE gig_id = $1 AND created_by = $2
+            RETURNING gig_id
+            `,
+            [gigId, userId]
+        )
+
+        if(!deleteGig){
+            return res.status(403).json({
+                status: "failed",
+                message: "Unauthorized access or gig not found",
+            })
+        }
+
+        res.status(200).json({
+            status: "success",
+            message: "Gig deleted successfully",
+        })
+
+
     } catch (error) {
         return res.status(500).json({
             status: "failed",
