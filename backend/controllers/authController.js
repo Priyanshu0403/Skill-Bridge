@@ -9,7 +9,10 @@ export const registerUser = async(req,res)=>{
             return res.status(400).json({status: "failed", message: "Provide required fields"});
         }
 
-        const userExists = await db.oneOrNone("Select user_id, email,password_hash from users where email = $1", [email]);
+        const userExists = await db.oneOrNone(
+            "Select user_id, email,password_hash from users where email = $1"
+            , [email]);
+            
         if(userExists){
             return res.status(409).json({
                 status: "failed",

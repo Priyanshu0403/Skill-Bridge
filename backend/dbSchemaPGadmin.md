@@ -5,7 +5,7 @@ CREATE TABLE users (
     email VARCHAR(200) UNIQUE NOT NULL,
     password_hash TEXT, -- if using custom login instead of Firebase
     bio TEXT,
-    credits INT DEFAULT 0,
+    credits INT DEFAULT ,
     reputation_score FLOAT DEFAULT 5.0,
     reviews_count INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT NOW()
@@ -14,15 +14,19 @@ CREATE TABLE users (
 --🟩 2. SKILLS TABLE
 CREATE TABLE skills (
     skill_id SERIAL PRIMARY KEY,
-    skill_name VARCHAR(100) UNIQUE NOT NULL
+    skill_name VARCHAR(100) UNIQUE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
 
 --🟧 3. USER_SKILLS TABLE (Many-to-Many)
 CREATE TABLE user_skills (
     user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
     skill_id INT REFERENCES skills(skill_id) ON DELETE CASCADE,
+    proficiency_level INT CHECK (proficiency_level BETWEEN 1 AND 5),
     PRIMARY KEY (user_id, skill_id)
 );
+
 
 --🟨 4. GIGS TABLE
 CREATE TABLE gigs (
@@ -72,33 +76,52 @@ CREATE TABLE gig_applications (
 CREATE TABLE gig_skills (
     gig_id INT REFERENCES gigs(gig_id) ON DELETE CASCADE,
     skill_id INT REFERENCES skills(skill_id) ON DELETE CASCADE,
+    proficiency_level INT CHECK (proficiency_level BETWEEN 1 AND 5),
     PRIMARY KEY (gig_id, skill_id)
 );
 
 --🟥 6. TRANSACTIONS TABLE (Money + Credit Exchange)
 CREATE TABLE transactions (
     transaction_id SERIAL PRIMARY KEY,
-    gig_id INT REFERENCES gigs(gig_id),
-    sender_id INT REFERENCES users(user_id),
-    receiver_id INT REFERENCES users(user_id),
-    mode VARCHAR(20), -- paid / credit
+    gig_id INT NOT NULL,
+    sender_id REFERENCES user(user_id) ON DELETE CASCADE,
+    receiver_id REFERENCES user(user_id) ON DELETE CASCADE,
+    mode VARCHAR(20) NOT NULL
+        CHECK (mode IN ('paid', 'credit')),
     credits_exchanged INT,
-    amount_paid INT,
-    status VARCHAR(20) DEFAULT 'completed',
-    timestamp TIMESTAMP DEFAULT NOW()
+    amount_paid NUMERIC(10,2),
+    status VARCHAR(20) NOT NULL DEFAULT 'completed'
+        CHECK (status IN ('pending', 'completed', 'failed')),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_transaction_gig
+        FOREIGN KEY (gig_id)
+        REFERENCES gigs(gig_id)
+        ON DELETE CASCADE,
+    CONSTRAINT check_transaction_logic
+        CHECK (
+            (mode = 'credit' AND credits_exchanged IS NOT NULL AND amount_paid IS NULL)
+         OR (mode = 'paid' AND amount_paid IS NOT NULL AND credits_exchanged IS NULL)
+        )
 );
+
 
 --🟪 7. REVIEWS TABLE
 CREATE TABLE reviews (
     review_id SERIAL PRIMARY KEY,
-    from_user INT REFERENCES users(user_id),
-    to_user INT REFERENCES users(user_id),
-    gig_id INT REFERENCES gigs(gig_id),
-    rating INT CHECK (rating >= 1 AND rating <= 5),
-    review_text TEXT,
-    sentiment_score FLOAT,
-    created_at TIMESTAMP DEFAULT NOW()
+
+    gig_id INT NOT NULL REFERENCES gigs(gig_id) ON DELETE CASCADE,
+    reviewer_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    reviewed_user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+
+    rating INT CHECK (rating BETWEEN 1 AND 5),
+    review TEXT,
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT unique_review_per_gig
+        UNIQUE (gig_id, reviewer_id)
 );
+
 
 --🟨 8. CREDIT_HISTORY TABLE
 CREATE TABLE credit_history (

@@ -12,6 +12,8 @@ const PORT = process.env.PORT || 8000;
 // app.use(express.json());
 //no need to use * for all the routes
 app.use(cors());
+
+//this lets u use the json format data
 app.use(express.json());//{limit: "10mb"}
 app.use(express.urlencoded({ extended: true}));
 
