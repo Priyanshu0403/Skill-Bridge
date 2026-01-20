@@ -26,7 +26,8 @@ const authMiddleware = (req,res,next)=>{
 		// Attach user to request
 		req.user = {
 			userId: decoded.user_id,
-			email: decoded.email
+			email: decoded.email,
+			role: decoded.role
 		};
 		next();
 	} catch (error) {

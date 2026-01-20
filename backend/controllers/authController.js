@@ -65,10 +65,11 @@ export const loginUser = async(req,res)=>{
 
     // Generate JWT token
     const token = jwt.sign(
-        {user_id: user.user_id, email: user.email},
+        {user_id: user.user_id, email: user.email,role: user.role},
         process.env.JWT_SECRET,
         {expiresIn: '1d'}
     )
+    // console.log(token);
 
     // here i Removed sensitive field before returning
     delete user.password_hash;
@@ -80,6 +81,7 @@ export const loginUser = async(req,res)=>{
             user_id: user.user_id,
             name: user.name,
             email: user.email,
+            role: user.role,
             created_at: user.created_at,
             credits: user.credits,
             reputation: user.reputation_score
@@ -99,7 +101,7 @@ export const getCurrentUser = async(req,res) =>{
         const userId = req.user.userId;
 
         const user = await db.oneOrNone(
-            `SELECT user_id, name, email, credits, reputation_score
+            `SELECT user_id, name, email, credits, reputation_score, role
             FROM users
             WHERE user_id = $1`,
             [userId]

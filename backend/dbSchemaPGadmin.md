@@ -2,14 +2,18 @@
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    email VARCHAR(200) UNIQUE NOT NULL,
-    password_hash TEXT, -- if using custom login instead of Firebase
+    email VARCHAR(150) UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,
     bio TEXT,
-    credits INT DEFAULT ,
-    reputation_score FLOAT DEFAULT 5.0,
+    credits INT DEFAULT 0,
+    reputation_score NUMERIC(3,2) DEFAULT 5.0,
     reviews_count INT DEFAULT 0,
-    created_at TIMESTAMP DEFAULT NOW()
+    role VARCHAR(20) DEFAULT 'student'
+        CHECK (role IN ('student', 'admin')),
+    is_blocked BOOLEAN DEFAULT false,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
 
 --🟩 2. SKILLS TABLE
 CREATE TABLE skills (
@@ -34,16 +38,17 @@ CREATE TABLE gigs (
     title VARCHAR(200) NOT NULL,
     description TEXT NOT NULL,
     -- money | skill (barter)
-    type VARCHAR(20) NOT NULL CHECK (type IN ('money', 'skill')),
+    type VARCHAR(20) NOT NULL
+        CHECK (type IN ('money', 'skill')),
     budget NUMERIC(10,2) DEFAULT 0,
-    created_by INTEGER NOT NULL,
-    status VARCHAR(20) NOT NULL CHECK (type IN ('open', 'assigned','completed')),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_gig_creator
-        FOREIGN KEY (created_by)
+    created_by INTEGER NOT NULL
         REFERENCES users(user_id)
-        ON DELETE CASCADE
+        ON DELETE CASCADE,
+    status VARCHAR(20) NOT NULL
+        CHECK (status IN ('open', 'assigned', 'completed', 'cancelled')),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
 
 --gig application table
 CREATE TABLE gig_applications (
