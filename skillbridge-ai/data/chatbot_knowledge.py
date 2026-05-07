@@ -8,14 +8,6 @@ PLATFORM_KNOWLEDGE = [
         ),
     },
     {
-        "topic": "resume",
-        "keywords": ["resume", "cv", "parse resume", "upload resume"],
-        "response": (
-            "You can upload a resume in PDF, DOCX, TXT, or MD format. The parser extracts contact details, "
-            "skills, education clues, and a short summary, then suggests profile updates you can apply."
-        ),
-    },
-    {
         "topic": "gigs",
         "keywords": ["gig", "post gig", "apply", "application"],
         "response": (
@@ -42,6 +34,6 @@ PLATFORM_KNOWLEDGE = [
 
 SUGGESTED_PROMPTS = [
     "How can I improve my profile for better gig matches?",
-    "What should I include in my resume before uploading it?",
+    "How do recommendations work on SkillBridge?",
     "How do paid gigs and barter gigs work here?",
 ]

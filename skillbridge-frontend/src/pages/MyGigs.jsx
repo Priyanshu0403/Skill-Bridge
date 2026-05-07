@@ -7,6 +7,7 @@ const MyGigs = () => {
   const [postedGigs, setPostedGigs] = useState([]);
   const [assignedGigs, setAssignedGigs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [deletingGigId, setDeletingGigId] = useState(null);
 
   useEffect(() => {
     fetchGigs();
@@ -37,8 +38,26 @@ const MyGigs = () => {
     return badges[status] || badges.open;
   };
 
+  const handleDeleteGig = async (gigId) => {
+    if (!window.confirm('Delete this posted gig? This action cannot be undone.')) {
+      return;
+    }
+
+    setDeletingGigId(gigId);
+
+    try {
+      await api.delete(`/api/gigs/${gigId}`);
+      await fetchGigs();
+    } catch (error) {
+      window.alert(error.response?.data?.message || 'Failed to delete gig');
+    } finally {
+      setDeletingGigId(null);
+    }
+  };
+
   const GigCard = ({ gig, isPosted }) => {
     const statusBadge = getStatusBadge(gig.status);
+    const canDeletePostedGig = isPosted && gig.status === 'open';
     
     return (
       <div className="bg-white rounded-xl border border-gray-200 p-6 hover:border-emerald-300 hover:shadow-lg transition-all">
@@ -115,6 +134,16 @@ const MyGigs = () => {
             >
               Applicants
             </Link>
+          )}
+          {canDeletePostedGig && (
+            <button
+              type="button"
+              onClick={() => handleDeleteGig(gig.id)}
+              disabled={deletingGigId === gig.id}
+              className="border border-red-200 text-red-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {deletingGigId === gig.id ? 'Deleting...' : 'Delete'}
+            </button>
           )}
         </div>
       </div>

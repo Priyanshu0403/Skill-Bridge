@@ -6,7 +6,6 @@ from flask_cors import CORS
 from matching import recommend_gigs
 from moderation import moderate_text
 from services.chatbot_service import generate_chat_response
-from services.resume_service import parse_resume_file
 
 
 app = Flask(__name__)
@@ -70,22 +69,6 @@ def chat():
         return jsonify({"error": str(exc)}), 400
     except Exception as exc:
         return jsonify({"error": "Failed to generate chat response", "details": str(exc)}), 500
-
-
-@app.route("/api/resume/parse", methods=["POST"])
-def parse_resume():
-    try:
-        payload = request.get_json(silent=True)
-        if payload is None:
-            return jsonify({"error": "Request body must be valid JSON"}), 400
-
-        file_path = payload.get("file_path", "")
-        result = parse_resume_file(file_path)
-        return jsonify(result), 200
-    except ValueError as exc:
-        return jsonify({"error": str(exc)}), 400
-    except Exception as exc:
-        return jsonify({"error": "Failed to parse resume", "details": str(exc)}), 500
 
 
 @app.errorhandler(404)

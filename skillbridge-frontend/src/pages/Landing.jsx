@@ -502,8 +502,128 @@ const Landing = () => {
         </div>
       </div>
 
+{/* Philosophy Section */}
+<div
+  id="the-exchange"
+  className="relative bg-gradient-to-b from-white via-gray-50 to-white py-24 px-6 border-t border-gray-200 overflow-hidden"
+>
+  {/* subtle background glow */}
+  <div className="absolute -top-20 -left-20 w-96 h-96 bg-emerald-200 opacity-20 blur-3xl rounded-full" />
+  <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-blue-200 opacity-20 blur-3xl rounded-full" />
+
+  <div className="max-w-6xl mx-auto relative z-10">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+      
+      {/* LEFT CONTENT */}
+      <div>
+        <p className="text-xs text-emerald-600 uppercase tracking-widest font-semibold mb-4">
+          The Philosophy
+        </p>
+
+        {/* <h2 className="text-4xl md:text-5xl font-light leading-tight mb-4 text-gray-900">
+          Built on trust,
+        </h2> */}
+        <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              <span className="bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+                Built on trust,
+              </span>
+              <br />
+              <span className="bg-gradient-to-r from-emerald-600 to-emerald-800 bg-clip-text text-transparent italic">
+                scaled with technology
+              </span>
+            </h2>
+
+        {/* <h2 className="text-4xl md:text-5xl italic font-light text-emerald-700 mb-6">
+          scaled with technology.
+        </h2> */}
+
+        <p className="text-gray-600 leading-relaxed text-lg mb-10 max-w-xl">
+          Skill Bridge isn't just another gig platform. It's a student-first
+          ecosystem where collaboration meets credibility — combining academic
+          excellence with real-world execution.
+        </p>
+
+        {/* POINTS */}
+        <div className="space-y-6">
+          {/* Item 1 */}
+          <div className="flex items-start gap-4 group">
+            <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center text-xl group-hover:scale-110 transition">
+              🛡️
+            </div>
+            <div>
+              <h3 className="font-bold text-gray-900 mb-1">
+                Student First
+              </h3>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                Every feature is crafted specifically for student life,
+                learning, and growth.
+              </p>
+            </div>
+          </div>
+
+          {/* Item 2 */}
+          <div className="flex items-start gap-4 group">
+            <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center text-xl group-hover:scale-110 transition">
+              🔒
+            </div>
+            <div>
+              <h3 className="font-bold text-gray-900 mb-1">
+                Safe & Verified
+              </h3>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                Verified students, secure transactions, and a trusted
+                environment to collaborate freely.
+              </p>
+            </div>
+          </div>
+
+          {/* Item 3 */}
+          <div className="flex items-start gap-4 group">
+            <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center text-xl group-hover:scale-110 transition">
+              ⚡
+            </div>
+            <div>
+              <h3 className="font-bold text-gray-900 mb-1">
+                Growth Driven
+              </h3>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                Build real projects, earn credibility, and grow beyond the
+                classroom.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* RIGHT SIDE VISUAL CARD */}
+      <div className="relative">
+        <div className="bg-white border border-gray-200 rounded-3xl shadow-xl p-8 backdrop-blur-sm hover:shadow-2xl transition duration-300">
+          <p className="text-sm uppercase tracking-wide text-gray-400 mb-4">
+            Our Vision
+          </p>
+
+          <h3 className="text-2xl font-semibold text-gray-900 mb-4 leading-snug">
+            A world where students don't wait to succeed —
+            <span className="text-emerald-600"> they start now.</span>
+          </h3>
+
+          <p className="text-gray-600 text-sm leading-relaxed mb-6">
+            We’re building a future where skills matter more than resumes,
+            collaboration beats competition, and students create value from day one.
+          </p>
+
+          <div className="flex items-center gap-2 text-emerald-600 font-medium text-sm">
+            <span>Explore the exchange</span>
+            <span>→</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
       {/* How It Works - Timeline */}
-      <div id="the-exchange" className="py-20 px-6 bg-white">
+      <div id="community" className="py-20 px-6 bg-white">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
@@ -609,10 +729,12 @@ const Landing = () => {
             Join 2,440+ students turning classroom knowledge into community
             value
           </p>
-          <button className="group bg-white text-emerald-900 px-10 py-5 rounded-full hover:shadow-2xl hover:scale-105 transition-all duration-300 font-bold text-lg inline-flex items-center gap-3">
+          <Link
+            to="/signup"
+            className="inline-block bg-white text-emerald-900 px-10 py-4 rounded-full hover:bg-gray-100 transition-all hover:scale-105 font-medium"
+          >
             Register with University Email
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </button>
+          </Link>
           <p className="text-emerald-200 text-sm mt-6 font-medium flex items-center justify-center gap-2">
             <CheckCircle className="w-4 h-4" />
             NO FEES. JUST GROWTH

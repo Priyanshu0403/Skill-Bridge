@@ -56,7 +56,7 @@ def generate_chat_response(message: str, profile: dict | None = None, history: l
 
     if top_score == 0:
         base_response = (
-            "I can help with SkillBridge questions about profiles, gigs, recommendations, payments, and resume uploads. "
+            "I can help with SkillBridge questions about profiles, gigs, recommendations, and payments. "
             "If you want, ask me something specific about using the platform or improving your profile."
         )
     else:

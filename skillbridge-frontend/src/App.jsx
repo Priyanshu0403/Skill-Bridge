@@ -17,7 +17,6 @@ import MyGigs from './pages/MyGigs';
 import Wallet from './pages/Wallet';
 import PublicProfile from './pages/PublicProfile';
 import Assistant from './pages/Assistant';
-import ResumeParser from './pages/ResumeParser';
 
 function App() {
   return (
@@ -123,14 +122,6 @@ function App() {
             element={
               <ProtectedRoute>
                 <Assistant />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/resume" 
-            element={
-              <ProtectedRoute>
-                <ResumeParser />
               </ProtectedRoute>
             } 
           />

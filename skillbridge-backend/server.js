@@ -4,6 +4,8 @@ import 'dotenv/config';
 console.log('Environment check:');
 console.log('SUPABASE_URL:', process.env.SUPABASE_URL);
 console.log('SUPABASE_KEY exists:', !!process.env.SUPABASE_KEY);
+console.log('SUPABASE_SERVICE_KEY exists:', !!process.env.SUPABASE_SERVICE_KEY);
+console.log('Using service role key:', !!process.env.SUPABASE_SERVICE_KEY);
 
 import express from 'express';
 import cors from 'cors';
@@ -16,7 +18,6 @@ import walletRoutes from './routes/wallet.js';
 import reviewRoutes from './routes/review.js';
 import mlRoutes from './routes/ml.js';
 import chatRoutes from './routes/chat.js';
-import resumeRoutes from './routes/resume.js';
 
 
 
@@ -40,7 +41,6 @@ app.use('/api/wallet', walletRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/ml', mlRoutes);
 app.use('/api/chat', chatRoutes);
-app.use('/api/resume', resumeRoutes);
 
 
 const PORT = process.env.PORT || 5000;

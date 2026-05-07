@@ -5,7 +5,7 @@ import api from '../services/api';
 
 const seedPrompts = [
   'How can I improve my profile for better gigs?',
-  'What does the resume parser extract?',
+  'How do recommendations work on SkillBridge?',
   'Explain paid gigs vs barter gigs.',
 ];
 
@@ -14,7 +14,7 @@ const Assistant = () => {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      content: `Hi ${profile?.full_name?.split(' ')?.[0] || 'there'}, I can help with profiles, gigs, resume uploads, and how SkillBridge works.`,
+      content: `Hi ${profile?.full_name?.split(' ')?.[0] || 'there'}, I can help with profiles, gigs, recommendations, payments, and how SkillBridge works.`,
     },
   ]);
   const [input, setInput] = useState('');
@@ -75,8 +75,11 @@ const Assistant = () => {
             <h1 className="text-2xl font-light text-slate-900">SkillBridge Assistant</h1>
           </div>
           <div className="flex items-center gap-4 text-sm">
+            <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-[10px] font-medium uppercase tracking-[0.2em] text-amber-700">
+              Testing
+            </span>
             <Link to="/dashboard" className="text-slate-600 transition-colors hover:text-slate-900">Dashboard</Link>
-            <Link to="/resume" className="text-slate-600 transition-colors hover:text-slate-900">Resume Parser</Link>
+            <Link to="/gigs" className="text-slate-600 transition-colors hover:text-slate-900">Gigs</Link>
           </div>
         </div>
       </nav>
@@ -86,7 +89,7 @@ const Assistant = () => {
           <p className="text-sm font-medium text-slate-900">What it can help with</p>
           <div className="mt-4 space-y-3 text-sm text-slate-600">
             <p>Platform guidance for gigs, payments, recommendations, and profiles.</p>
-            <p>Resume upload tips before parsing and applying fields to your profile.</p>
+            <p>Testing support for common student questions before a full AI assistant rollout.</p>
             <p>Personalized suggestions using your current SkillBridge profile context.</p>
           </div>
           <div className="mt-6 rounded-2xl bg-emerald-50 p-4 text-sm text-emerald-900">
@@ -139,7 +142,7 @@ const Assistant = () => {
             <textarea
               value={input}
               onChange={(event) => setInput(event.target.value)}
-              placeholder="Ask about recommendations, profiles, payments, or resume uploads..."
+              placeholder="Ask about recommendations, profiles, gigs, or payments..."
               rows="3"
               className="min-h-[76px] flex-1 rounded-3xl border border-slate-200 bg-white px-5 py-4 text-sm text-slate-700 outline-none transition focus:border-emerald-500"
             />

@@ -291,6 +291,193 @@ export const getMyAssignedGigs = async (req, res) => {
   }
 };
 
+const updateReputationScore = async (profileId) => {
+  try {
+    const { data: reviews, error: reviewsError } = await supabase
+      .from('reviews')
+      .select('rating')
+      .eq('reviewee_id', profileId);
+
+    if (reviewsError) throw reviewsError;
+
+    const { count, error: transactionsError } = await supabase
+      .from('transactions')
+      .select('*', { count: 'exact', head: true })
+      .or(`creator_id.eq.${profileId},freelancer_id.eq.${profileId}`)
+      .eq('status', 'completed');
+
+    if (transactionsError) throw transactionsError;
+
+    const avgRating = reviews.length > 0
+      ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
+      : 0;
+
+    const reputationScore = ((count || 0) * 10) + (avgRating * 20);
+
+    const { error: profileUpdateError } = await supabase
+      .from('profiles')
+      .update({ reputation_score: reputationScore })
+      .eq('id', profileId);
+
+    if (profileUpdateError) throw profileUpdateError;
+  } catch (error) {
+    console.error('Error updating reputation after gig deletion:', error.message);
+  }
+};
+
+export const deleteGig = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.id;
+
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('user_id', userId)
+      .single();
+
+    if (profileError) throw profileError;
+
+    const { data: gig, error: gigError } = await supabase
+      .from('gigs')
+      .select('id, creator_id')
+      .eq('id', id)
+      .single();
+
+    if (gigError) throw gigError;
+
+    if (!gig) {
+      return res.status(404).json({ success: false, message: 'Gig not found' });
+    }
+
+    if (gig.creator_id !== profile.id) {
+      return res.status(403).json({ success: false, message: 'You can only delete gigs you posted' });
+    }
+
+    const { data: transactions, error: transactionsError } = await supabase
+      .from('transactions')
+      .select('id, creator_id, freelancer_id, type, amount, credits, status')
+      .eq('gig_id', id);
+
+    if (transactionsError) throw transactionsError;
+
+    const profileAdjustments = new Map();
+    const affectedProfileIds = new Set([profile.id]);
+
+    const addProfileAdjustment = (profileId, field, delta) => {
+      if (!profileId || !delta) return;
+
+      const existingAdjustment = profileAdjustments.get(profileId) || { credits: 0, wallet_balance: 0 };
+      existingAdjustment[field] += delta;
+      profileAdjustments.set(profileId, existingAdjustment);
+      affectedProfileIds.add(profileId);
+    };
+
+    for (const transaction of transactions || []) {
+      affectedProfileIds.add(transaction.creator_id);
+      affectedProfileIds.add(transaction.freelancer_id);
+
+      if (transaction.type === 'barter') {
+        addProfileAdjustment(transaction.creator_id, 'credits', transaction.credits || 0);
+
+        if (transaction.status === 'completed') {
+          addProfileAdjustment(transaction.freelancer_id, 'credits', -(transaction.credits || 0));
+        }
+      }
+
+      if (transaction.type === 'paid' && transaction.status === 'completed') {
+        addProfileAdjustment(transaction.freelancer_id, 'wallet_balance', -(transaction.amount || 0));
+      }
+    }
+
+    for (const [profileId, adjustment] of profileAdjustments.entries()) {
+      const { data: existingProfile, error: existingProfileError } = await supabase
+        .from('profiles')
+        .select('credits, wallet_balance')
+        .eq('id', profileId)
+        .single();
+
+      if (existingProfileError) throw existingProfileError;
+
+      const nextProfileData = {};
+
+      if (adjustment.credits !== 0) {
+        nextProfileData.credits = Math.max(0, (existingProfile.credits || 0) + adjustment.credits);
+      }
+
+      if (adjustment.wallet_balance !== 0) {
+        nextProfileData.wallet_balance = Math.max(0, (existingProfile.wallet_balance || 0) + adjustment.wallet_balance);
+      }
+
+      if (Object.keys(nextProfileData).length > 0) {
+        const { error: profileUpdateError } = await supabase
+          .from('profiles')
+          .update(nextProfileData)
+          .eq('id', profileId);
+
+        if (profileUpdateError) throw profileUpdateError;
+      }
+    }
+
+    const transactionIds = (transactions || []).map((transaction) => transaction.id);
+
+    if (transactionIds.length > 0) {
+      const { error: reviewsDeleteError } = await supabase
+        .from('reviews')
+        .delete()
+        .in('transaction_id', transactionIds);
+
+      if (reviewsDeleteError) throw reviewsDeleteError;
+    }
+
+    const { error: creditsLedgerDeleteError } = await supabase
+      .from('credits_ledger')
+      .delete()
+      .eq('gig_id', id);
+
+    if (creditsLedgerDeleteError) throw creditsLedgerDeleteError;
+
+    if (transactionIds.length > 0) {
+      const { error: transactionsDeleteError } = await supabase
+        .from('transactions')
+        .delete()
+        .eq('gig_id', id);
+
+      if (transactionsDeleteError) throw transactionsDeleteError;
+    }
+
+    const { error: applicationsDeleteError } = await supabase
+      .from('applications')
+      .delete()
+      .eq('gig_id', id);
+
+    if (applicationsDeleteError) throw applicationsDeleteError;
+
+    const { data: deletedGig, error: gigDeleteError } = await supabase
+      .from('gigs')
+      .delete()
+      .eq('id', id)
+      .select('id')
+      .maybeSingle();
+
+    if (gigDeleteError) throw gigDeleteError;
+    if (!deletedGig) {
+      return res.status(500).json({
+        success: false,
+        message: 'Gig delete request completed but no database row was removed'
+      });
+    }
+
+    for (const affectedProfileId of affectedProfileIds) {
+      await updateReputationScore(affectedProfileId);
+    }
+
+    res.json({ success: true, message: 'Gig deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 export const completeGig = async (req, res) => {
   const rollbackState = {
     transactionId: null,
