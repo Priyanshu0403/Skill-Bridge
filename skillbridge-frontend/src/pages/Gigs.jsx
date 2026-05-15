@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import ThemeToggle from '../components/ThemeToggle';
 import api from '../services/api';
 
 const Gigs = () => {
@@ -110,9 +111,10 @@ const Gigs = () => {
       {/* Header/Navigation */}
       <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <Link to="/" className="text-xl font-light tracking-wide">Skill bridge</Link>
+          <Link to="/dashboard" className="text-xl font-light tracking-wide">Skill bridge</Link>
           <div className="flex items-center gap-4">
-            <Link to="/" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+            <ThemeToggle />
+            <Link to="/dashboard" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
               Dashboard
             </Link>
             <Link
@@ -128,8 +130,8 @@ const Gigs = () => {
       <div className="max-w-7xl mx-auto px-6 py-12">
         {/* Header */}
         <div className="mb-8">
-          <Link to="/" className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 transition-colors mb-4">
-            ← Back to Dashboard
+          <Link to="/dashboard" className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 transition-colors mb-4">
+            Dashboard
           </Link>
           <h1 className="text-4xl font-light mb-2">Browse Opportunities</h1>
           <p className="text-gray-600">Discover gigs and connect with peers across campus</p>

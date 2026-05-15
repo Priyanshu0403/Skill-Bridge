@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
+import ThemeToggle from '../components/ThemeToggle';
 import BridgeIcon from '../assets/bridge-icon.png';
 import {
   Sparkles,
@@ -158,7 +159,7 @@ const Landing = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50 overflow-hidden">
+    <div className="min-h-screen overflow-hidden bg-gradient-to-br from-slate-50 via-white to-emerald-50 dark:from-slate-950 dark:via-slate-900 dark:to-emerald-950/40">
       {/* Animated Background Elements */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div
@@ -182,7 +183,9 @@ const Landing = () => {
       {/* Sticky Navbar with Glass Effect */}
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled ? "bg-white/80 backdrop-blur-lg shadow-lg" : "bg-transparent"
+          scrolled
+            ? "bg-white/80 backdrop-blur-lg shadow-lg dark:bg-slate-950/80 dark:shadow-slate-950/40"
+            : "bg-transparent"
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
@@ -196,13 +199,14 @@ const Landing = () => {
           </div>
 
           <div className="hidden md:flex gap-8 items-center">
+            <ThemeToggle />
             {["Our Stories", "The Exchange", "Community"].map((item, idx) => (
               <button
                 key={idx}
                 onClick={() =>
                   scrollToSection(item.toLowerCase().replace(" ", "-"))
                 }
-                className="text-sm text-gray-600 hover:text-emerald-600 transition-all relative group"
+                className="relative group text-sm text-gray-600 transition-all hover:text-emerald-600 dark:text-slate-300 dark:hover:text-emerald-400"
               >
                 {item}
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-600 group-hover:w-full transition-all duration-300" />
@@ -221,7 +225,7 @@ const Landing = () => {
       </nav>
 
       {/* Hero Section with Background Image */}
-      <div className="relative pt-32 pb-20 px-6 overflow-hidden">
+      <div className="relative overflow-hidden px-6 pt-32 pb-20">
         {/* Hero Background Image with Overlay */}
         <div className="absolute inset-0 z-0">
           <img
@@ -229,13 +233,13 @@ const Landing = () => {
             alt="Students collaborating"
             className="w-full h-full object-cover opacity-10"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-white/90 via-white/70 to-white/90" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/90 via-white/70 to-white/90 dark:from-slate-950/95 dark:via-slate-950/80 dark:to-slate-900/95" />
         </div>
 
         <div className="max-w-6xl mx-auto relative z-10">
           {/* Floating Badge */}
           <div className="flex justify-center mb-1 animate-bounce">
-            <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-700 px-4 py-2 rounded-full text-sm font-medium shadow-lg">
+            <div className="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-2 text-sm font-medium text-emerald-700 shadow-lg dark:bg-emerald-500/15 dark:text-emerald-300 dark:ring-1 dark:ring-emerald-400/20">
               <Sparkles className="w-4 h-4" />
               Trusted by 2,440+ students
             </div>
@@ -243,20 +247,20 @@ const Landing = () => {
           <div className="relative pt-10 pb-10 px-6 overflow-hidden">
             <div className="text-center space-y-6 mb-12 mx-auto relative z-10">
               <h2 className="text-6xl md:text-7xl font-bold leading-tight">
-                <span className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent animate-fade-in">
+                <span className="animate-fade-in bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent dark:from-white dark:via-slate-100 dark:to-slate-300">
                   Trade Skills.
                 </span>
                 <br />
-                <span className="bg-gradient-to-r from-emerald-600 to-emerald-800 bg-clip-text text-transparent italic animate-fade-in-delay-1">
+                <span className="animate-fade-in-delay-1 bg-gradient-to-r from-emerald-600 to-emerald-800 bg-clip-text text-transparent italic dark:from-emerald-300 dark:to-emerald-500">
                   Earn Together.
                 </span>
                 <br />
-                <span className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent animate-fade-in-delay-2">
+                <span className="animate-fade-in-delay-2 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent dark:from-white dark:via-slate-100 dark:to-slate-300">
                   Build the Future.
                 </span>
               </h2>
 
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed animate-fade-in-delay-3">
+              <p className="mx-auto max-w-3xl animate-fade-in-delay-3 text-xl leading-relaxed text-gray-600 dark:text-slate-300">
                 Join the most prestigious network of verified students building
                 real-world projects through
                 <span className="text-emerald-600 font-semibold">
@@ -276,7 +280,7 @@ const Landing = () => {
                 </Link>
                 <button
                   onClick={() => scrollToSection("exchange")}
-                  className="text-emerald-700 hover:text-emerald-900 transition-colors flex items-center gap-2"
+                  className="flex items-center gap-2 text-emerald-700 transition-colors hover:text-emerald-900 dark:text-emerald-300 dark:hover:text-emerald-200"
                 >
                   How we exchange <span>→</span>
                 </button>
@@ -300,7 +304,7 @@ const Landing = () => {
               return (
                 <div
                   key={idx}
-                  className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-gray-200 hover:border-emerald-300 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
+                  className="transform rounded-2xl border border-gray-200 bg-white/70 p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-2 hover:border-emerald-300 hover:shadow-xl dark:border-slate-700 dark:bg-slate-900/70 dark:hover:border-emerald-500"
                   style={{ animationDelay: `${idx * 100}ms` }}
                 >
                   <div className="flex items-center gap-4">
@@ -308,10 +312,10 @@ const Landing = () => {
                       <Icon className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <div className="text-3xl font-bold text-gray-900">
+                      <div className="text-3xl font-bold text-gray-900 dark:text-white">
                         {stat.number}
                       </div>
-                      <div className="text-sm text-gray-600">{stat.label}</div>
+                      <div className="text-sm text-gray-600 dark:text-slate-300">{stat.label}</div>
                     </div>
                   </div>
                 </div>
@@ -322,11 +326,11 @@ const Landing = () => {
       </div>
 
       {/* Skill Categories Showcase */}
-      <div className="py-20 px-6 bg-gradient-to-b from-white to-gray-50">
+      <div className="bg-gradient-to-b from-white to-gray-50 px-6 py-20 dark:from-slate-950 dark:to-slate-900">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h3 className="text-3xl md:text-4xl font-bold mb-4">
-              <span className="bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent dark:from-white dark:to-slate-300">
                 Explore Skills in Every
               </span>
               <span className="bg-gradient-to-r from-emerald-600 to-emerald-800 bg-clip-text text-transparent">
@@ -366,11 +370,11 @@ const Landing = () => {
       </div>
 
       {/* Features Grid with Images */}
-      <div className="py-20 px-6 relative bg-white">
+      <div className="relative bg-white px-6 py-20 dark:bg-slate-950">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h3 className="text-4xl md:text-5xl font-bold mb-4">
-              <span className="bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent dark:from-white dark:to-slate-300">
                 Why Students Choose
               </span>
               <span className="bg-gradient-to-r from-emerald-600 to-emerald-800 bg-clip-text text-transparent italic">
@@ -386,7 +390,7 @@ const Landing = () => {
               return (
                 <div
                   key={idx}
-                  className="group relative bg-white rounded-2xl overflow-hidden border-2 border-gray-200 hover:border-emerald-500 transition-all duration-300 cursor-pointer hover:shadow-2xl"
+                  className="group relative cursor-pointer overflow-hidden rounded-2xl border-2 border-gray-200 bg-white transition-all duration-300 hover:border-emerald-500 hover:shadow-2xl dark:border-slate-700 dark:bg-slate-900"
                   onMouseEnter={() => setActiveCard(idx)}
                   onMouseLeave={() => setActiveCard(null)}
                 >
@@ -406,10 +410,10 @@ const Landing = () => {
                   </div>
 
                   <div className="p-6">
-                    <h4 className="text-xl font-bold text-gray-900 mb-3">
+                    <h4 className="mb-3 text-xl font-bold text-gray-900 dark:text-white">
                       {feature.title}
                     </h4>
-                    <p className="text-gray-600 leading-relaxed">
+                    <p className="leading-relaxed text-gray-600 dark:text-slate-300">
                       {feature.desc}
                     </p>
                   </div>
@@ -426,7 +430,7 @@ const Landing = () => {
       {/* Success Stories with Real Images */}
       <div
         id="our-stories"
-        className="py-20 px-6 bg-gradient-to-b from-gray-50 to-white"
+        className="bg-gradient-to-b from-gray-50 to-white px-6 py-20 dark:from-slate-900 dark:to-slate-950"
       >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
@@ -434,7 +438,7 @@ const Landing = () => {
               Success Stories
             </div>
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              <span className="bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent dark:from-white dark:to-slate-300">
                 Where ambition meets
               </span>
               <br />
@@ -485,13 +489,13 @@ const Landing = () => {
                   </div>
 
                   <div className="px-2">
-                    <h3 className="text-2xl font-bold text-gray-900 mb-1">
+                    <h3 className="mb-1 text-2xl font-bold text-gray-900 dark:text-white">
                       {person.name}
                     </h3>
                     <p className="text-sm text-emerald-600 mb-3 italic font-medium">
                       {person.major}
                     </p>
-                    <p className="text-sm text-gray-600 leading-relaxed">
+                    <p className="text-sm leading-relaxed text-gray-600 dark:text-slate-300">
                       {person.story}
                     </p>
                   </div>
@@ -505,7 +509,7 @@ const Landing = () => {
 {/* Philosophy Section */}
 <div
   id="the-exchange"
-  className="relative bg-gradient-to-b from-white via-gray-50 to-white py-24 px-6 border-t border-gray-200 overflow-hidden"
+  className="relative overflow-hidden border-t border-gray-200 bg-gradient-to-b from-white via-gray-50 to-white px-6 py-24 dark:border-slate-800 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950"
 >
   {/* subtle background glow */}
   <div className="absolute -top-20 -left-20 w-96 h-96 bg-emerald-200 opacity-20 blur-3xl rounded-full" />
@@ -516,7 +520,7 @@ const Landing = () => {
       
       {/* LEFT CONTENT */}
       <div>
-        <p className="text-xs text-emerald-600 uppercase tracking-widest font-semibold mb-4">
+        <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-emerald-600 dark:text-emerald-400">
           The Philosophy
         </p>
 
@@ -524,7 +528,7 @@ const Landing = () => {
           Built on trust,
         </h2> */}
         <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              <span className="bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent dark:from-white dark:to-slate-300">
                 Built on trust,
               </span>
               <br />
@@ -537,7 +541,7 @@ const Landing = () => {
           scaled with technology.
         </h2> */}
 
-        <p className="text-gray-600 leading-relaxed text-lg mb-10 max-w-xl">
+        <p className="mb-10 max-w-xl text-lg leading-relaxed text-gray-600 dark:text-slate-300">
           Skill Bridge isn't just another gig platform. It's a student-first
           ecosystem where collaboration meets credibility — combining academic
           excellence with real-world execution.
@@ -551,10 +555,10 @@ const Landing = () => {
               🛡️
             </div>
             <div>
-              <h3 className="font-bold text-gray-900 mb-1">
+              <h3 className="mb-1 font-bold text-gray-900 dark:text-white">
                 Student First
               </h3>
-              <p className="text-sm text-gray-600 leading-relaxed">
+              <p className="text-sm leading-relaxed text-gray-600 dark:text-slate-300">
                 Every feature is crafted specifically for student life,
                 learning, and growth.
               </p>
@@ -567,10 +571,10 @@ const Landing = () => {
               🔒
             </div>
             <div>
-              <h3 className="font-bold text-gray-900 mb-1">
+              <h3 className="mb-1 font-bold text-gray-900 dark:text-white">
                 Safe & Verified
               </h3>
-              <p className="text-sm text-gray-600 leading-relaxed">
+              <p className="text-sm leading-relaxed text-gray-600 dark:text-slate-300">
                 Verified students, secure transactions, and a trusted
                 environment to collaborate freely.
               </p>
@@ -583,10 +587,10 @@ const Landing = () => {
               ⚡
             </div>
             <div>
-              <h3 className="font-bold text-gray-900 mb-1">
+              <h3 className="mb-1 font-bold text-gray-900 dark:text-white">
                 Growth Driven
               </h3>
-              <p className="text-sm text-gray-600 leading-relaxed">
+              <p className="text-sm leading-relaxed text-gray-600 dark:text-slate-300">
                 Build real projects, earn credibility, and grow beyond the
                 classroom.
               </p>
@@ -597,17 +601,17 @@ const Landing = () => {
 
       {/* RIGHT SIDE VISUAL CARD */}
       <div className="relative">
-        <div className="bg-white border border-gray-200 rounded-3xl shadow-xl p-8 backdrop-blur-sm hover:shadow-2xl transition duration-300">
-          <p className="text-sm uppercase tracking-wide text-gray-400 mb-4">
+        <div className="rounded-3xl border border-gray-200 bg-white p-8 shadow-xl backdrop-blur-sm transition duration-300 hover:shadow-2xl dark:border-slate-700 dark:bg-slate-900/90">
+          <p className="mb-4 text-sm uppercase tracking-wide text-gray-400 dark:text-slate-400">
             Our Vision
           </p>
 
-          <h3 className="text-2xl font-semibold text-gray-900 mb-4 leading-snug">
+          <h3 className="mb-4 text-2xl font-semibold leading-snug text-gray-900 dark:text-white">
             A world where students don't wait to succeed —
             <span className="text-emerald-600"> they start now.</span>
           </h3>
 
-          <p className="text-gray-600 text-sm leading-relaxed mb-6">
+          <p className="mb-6 text-sm leading-relaxed text-gray-600 dark:text-slate-300">
             We’re building a future where skills matter more than resumes,
             collaboration beats competition, and students create value from day one.
           </p>
@@ -623,7 +627,7 @@ const Landing = () => {
   </div>
 </div>
       {/* How It Works - Timeline */}
-      <div id="community" className="py-20 px-6 bg-white">
+      <div id="community" className="bg-white px-6 py-20 dark:bg-slate-950">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
@@ -664,7 +668,7 @@ const Landing = () => {
               return (
                 <div
                   key={idx}
-                  className="group relative bg-white rounded-2xl overflow-hidden border-2 border-gray-200 hover:border-emerald-500 hover:shadow-2xl transition-all duration-300"
+                  className="group relative overflow-hidden rounded-2xl border-2 border-gray-200 bg-white transition-all duration-300 hover:border-emerald-500 hover:shadow-2xl dark:border-slate-700 dark:bg-slate-900"
                 >
                   {/* Image Section */}
                   <div className="relative h-48 overflow-hidden">
@@ -687,10 +691,10 @@ const Landing = () => {
                   </div>
 
                   <div className="p-6">
-                    <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-emerald-700 transition-colors">
+                    <h3 className="mb-3 text-xl font-bold text-gray-900 transition-colors group-hover:text-emerald-700 dark:text-white dark:group-hover:text-emerald-400">
                       {step.title}
                     </h3>
-                    <p className="text-gray-600 leading-relaxed">{step.desc}</p>
+                    <p className="leading-relaxed text-gray-600 dark:text-slate-300">{step.desc}</p>
                   </div>
                 </div>
               );

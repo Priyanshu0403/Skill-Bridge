@@ -1,6 +1,7 @@
 import { useContext, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import ThemeToggle from '../components/ThemeToggle';
 import api from '../services/api';
 
 const seedPrompts = [
@@ -75,6 +76,7 @@ const Assistant = () => {
             <h1 className="text-2xl font-light text-slate-900">SkillBridge Assistant</h1>
           </div>
           <div className="flex items-center gap-4 text-sm">
+            <ThemeToggle />
             <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-[10px] font-medium uppercase tracking-[0.2em] text-amber-700">
               Testing
             </span>

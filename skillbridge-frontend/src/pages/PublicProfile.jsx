@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import ThemeToggle from '../components/ThemeToggle';
 import api from '../services/api';
 
 const PublicProfile = () => {
@@ -67,12 +68,13 @@ const PublicProfile = () => {
       {/* Header/Navigation */}
       <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <Link to="/" className="text-xl font-light tracking-wide">Skill bridge</Link>
+          <Link to="/dashboard" className="text-xl font-light tracking-wide">Skill bridge</Link>
           <div className="flex items-center gap-4">
+            <ThemeToggle />
             <Link to="/gigs" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
               Browse Gigs
             </Link>
-            <Link to="/" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+            <Link to="/dashboard" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
               Dashboard
             </Link>
           </div>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import ThemeToggle from '../components/ThemeToggle';
 import api from '../services/api';
 
 const MyGigs = () => {
@@ -166,12 +167,13 @@ const MyGigs = () => {
       {/* Header/Navigation */}
       <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <Link to="/" className="text-xl font-light tracking-wide">Skill bridge</Link>
+          <Link to="/dashboard" className="text-xl font-light tracking-wide">Skill bridge</Link>
           <div className="flex items-center gap-4">
+            <ThemeToggle />
             <Link to="/gigs" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
               Browse Gigs
             </Link>
-            <Link to="/" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+            <Link to="/dashboard" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
               Dashboard
             </Link>
           </div>
@@ -181,8 +183,8 @@ const MyGigs = () => {
       <div className="max-w-6xl mx-auto px-6 py-12">
         {/* Header */}
         <div className="mb-8">
-          <Link to="/" className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 transition-colors mb-4">
-            ← Back to Dashboard
+          <Link to="/dashboard" className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 transition-colors mb-4">
+            Dashboard
           </Link>
           <h1 className="text-4xl font-light mb-2">My Gigs</h1>
           <p className="text-gray-600">Manage gigs you've posted and gigs assigned to you</p>
